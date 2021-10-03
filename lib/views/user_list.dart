@@ -1,5 +1,6 @@
 import 'package:contatos/components/user_tile.dart';
 import 'package:contatos/models/user.dart';
+import 'package:contatos/routes/app_routes.dart';
 import 'package:contatos/user_data/user_data.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +23,9 @@ class UserList extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(AppRoutes.USER_FORM);
+            },
             icon: const Icon(Icons.add),
           ),
         ],

@@ -1,3 +1,5 @@
+import 'package:contatos/routes/app_routes.dart';
+import 'package:contatos/views/user_form.dart';
 import 'package:contatos/views/user_list.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +18,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.purple,
       ),
-      home: const UserList(),
+      routes: {
+        AppRoutes.HOME: (_) => const UserList(),
+        AppRoutes.USER_FORM: (_) => const UserForm(),
+      },
     );
   }
 }
