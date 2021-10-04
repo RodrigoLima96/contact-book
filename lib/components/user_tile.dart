@@ -1,4 +1,5 @@
 import 'package:contatos/models/user.dart';
+import 'package:contatos/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 
 class UserTile extends StatelessWidget {
@@ -7,10 +8,11 @@ class UserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final avatar = user.avatarUrl.isEmpty
+        ? const CircleAvatar(child: Icon(Icons.person))
+        : CircleAvatar(backgroundImage: NetworkImage(user.avatarUrl));
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: NetworkImage(user.avatarUrl),
-      ),
+      leading: avatar,
       title: Text(user.name),
       subtitle: Text(user.email),
       trailing: SizedBox(
@@ -18,7 +20,12 @@ class UserTile extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(
+                  AppRoutes.USER_FORM,
+                  arguments: user,
+                );
+              },
               color: Colors.purple[200],
               icon: const Icon(Icons.edit),
             ),
