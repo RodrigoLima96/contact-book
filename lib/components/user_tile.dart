@@ -1,6 +1,8 @@
 import 'package:contatos/models/user.dart';
+import 'package:contatos/provider/user.dart';
 import 'package:contatos/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserTile extends StatelessWidget {
   final User user;
@@ -50,7 +52,7 @@ class UserTile extends StatelessWidget {
                   ),
                 ).then((confirmed) {
                   if (confirmed) {
-                    //Excluir contato
+                    Provider.of<Users>(context, listen: false).remove(user);
                   }
                 });
               },

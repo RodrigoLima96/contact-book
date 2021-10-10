@@ -1,5 +1,7 @@
 import 'package:contatos/models/user.dart';
+import 'package:contatos/provider/user.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({Key? key}) : super(key: key);
@@ -23,19 +25,17 @@ class _UserFormState extends State<UserForm> {
     }
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-  //   //recebendo os dados pela rota
-  //   final user = ModalRoute.of(context)!.settings.arguments as User?;
-  //   _loadFormData(user);
-  // }
+    //recebendo os dados pela rota
+    final user = ModalRoute.of(context)!.settings.arguments as User?;
+    _loadFormData(user);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final user = ModalRoute.of(context)!.settings.arguments as User?;
-    _loadFormData(user);
     return Scaffold(
       appBar: AppBar(
         title: Center(child: Text(title)),
@@ -46,6 +46,14 @@ class _UserFormState extends State<UserForm> {
               final isValid = _form.currentState!.validate();
               if (isValid) {
                 _form.currentState!.save();
+                Provider.of<Users>(context, listen: false).put(
+                  User(
+                    _formData['id'].toString(),
+                    _formData['name'].toString(),
+                    _formData['email'].toString(),
+                    _formData['avatarUrl'].toString(),
+                  ),
+                );
                 Navigator.of(context).pop();
               }
             },
@@ -71,7 +79,7 @@ class _UserFormState extends State<UserForm> {
                   }
                   return null;
                 },
-                onSaved: (value) {},
+                onSaved: (value) => _formData['name'] = value!,
               ),
               TextFormField(
                 initialValue: _formData['email'],
@@ -85,13 +93,12 @@ class _UserFormState extends State<UserForm> {
                     return 'Email inválido';
                   }
                 },
-                onSaved: (value) {},
+                onSaved: (value) => _formData['email'] = value!,
               ),
               TextFormField(
-                initialValue: _formData['avatarUrl'],
-                decoration: const InputDecoration(labelText: 'Url do avatar'),
-                onSaved: (value) {},
-              )
+                  initialValue: _formData['avatarUrl'],
+                  decoration: const InputDecoration(labelText: 'Url do avatar'),
+                  onSaved: (value) => _formData['avatarUrl'] = value!),
             ],
           ),
         ),

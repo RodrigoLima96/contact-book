@@ -1,15 +1,15 @@
 import 'package:contatos/components/user_tile.dart';
-import 'package:contatos/models/user.dart';
+import 'package:contatos/provider/user.dart';
 import 'package:contatos/routes/app_routes.dart';
-import 'package:contatos/user_data/user_data.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class UserList extends StatelessWidget {
   const UserList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, User> users = {...userData};
+    final Users users = Provider.of(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -31,8 +31,8 @@ class UserList extends StatelessWidget {
         ],
       ),
       body: ListView.builder(
-        itemCount: users.length,
-        itemBuilder: (ctx, i) => UserTile(user: users.values.elementAt(i)),
+        itemCount: users.count,
+        itemBuilder: (ctx, i) => UserTile(user: users.byIndex(i)),
       ),
     );
   }
