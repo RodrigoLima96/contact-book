@@ -1,10 +1,13 @@
+import 'dart:convert';
 import 'dart:math';
-
 import 'package:contatos/models/user.dart';
 import 'package:contatos/user_data/user_data.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 
 class Users with ChangeNotifier {
+  static const _baseUrl =
+      "https://contact-book-a39ab-default-rtdb.firebaseio.com/";
   final Map<String, User> _items = {...userData};
 
   List<User> get all {
@@ -19,7 +22,7 @@ class Users with ChangeNotifier {
     return _items.values.elementAt(i);
   }
 
-  void put(User user) {
+  Future<void> put(User user) async {
     if (user == null) {
       return;
     }
@@ -29,7 +32,18 @@ class Users with ChangeNotifier {
         _items.containsKey(user.id)) {
       _items.update(user.id, (value) => user);
     } else {
-      final id = Random().nextDouble().toString();
+      final response = await http.post(
+        Uri.parse("$_baseUrl/users.json"),
+        body: jsonEncode({
+          'name': user.name,
+          'email': user.email,
+          'avatarUrl': user.avatarUrl
+        }),
+      );
+
+      final id = jsonDecode(response.body)['name'];
+
+      print(jsonDecode(response.body));
 
       _items.putIfAbsent(
         id,
