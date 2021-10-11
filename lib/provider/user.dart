@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:contatos/models/user.dart';
 import 'package:contatos/user_data/user_data.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,6 +29,15 @@ class Users with ChangeNotifier {
     if (user.id != null &&
         user.id.trim().isNotEmpty &&
         _items.containsKey(user.id)) {
+      await http.patch(
+        Uri.parse("$_baseUrl/users/${user.id}.json"),
+        body: jsonEncode({
+          'name': user.name,
+          'email': user.email,
+          'avatarUrl': user.avatarUrl
+        }),
+      );
+
       _items.update(user.id, (value) => user);
     } else {
       final response = await http.post(
@@ -42,8 +50,6 @@ class Users with ChangeNotifier {
       );
 
       final id = jsonDecode(response.body)['name'];
-
-      print(jsonDecode(response.body));
 
       _items.putIfAbsent(
         id,
