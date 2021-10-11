@@ -64,9 +64,12 @@ class Users with ChangeNotifier {
     notifyListeners();
   }
 
-  void remove(User user) {
+  Future<void> remove(User user) async {
     if (user != null && user.id != null) {
       _items.remove(user.id);
+      await http.delete(
+        Uri.parse("$_baseUrl/users/${user.id}.json"),
+      );
       notifyListeners();
     }
   }
