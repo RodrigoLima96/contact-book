@@ -7,6 +7,16 @@ import 'package:http/http.dart' as http;
 class Users with ChangeNotifier {
   static const _baseUrl =
       "https://contact-book-a39ab-default-rtdb.firebaseio.com/";
+
+  Future<User> userData2() async {
+    final response = await http.get(Uri.parse('$_baseUrl/users.json'));
+    if (response.statusCode == 200) {
+      return User.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load album');
+    }
+  }
+
   final Map<String, User> _items = {...userData};
 
   List<User> get all {
@@ -50,6 +60,7 @@ class Users with ChangeNotifier {
       );
 
       final id = jsonDecode(response.body)['name'];
+      print(jsonDecode(response.body)['email']);
 
       _items.putIfAbsent(
         id,
