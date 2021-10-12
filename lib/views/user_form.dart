@@ -52,10 +52,10 @@ class _UserFormState extends State<UserForm> {
                 });
                 await Provider.of<Users>(context, listen: false).put(
                   User(
-                    _formData['id'].toString(),
-                    _formData['name'].toString(),
-                    _formData['email'].toString(),
-                    _formData['avatarUrl'].toString(),
+                    id: _formData['id'].toString(),
+                    name: _formData['name'].toString(),
+                    email: _formData['email'].toString(),
+                    avatarUrl: _formData['avatarUrl'].toString(),
                   ),
                 );
                 setState(() {

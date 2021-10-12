@@ -8,16 +8,16 @@ class Users with ChangeNotifier {
   static const _baseUrl =
       "https://contact-book-a39ab-default-rtdb.firebaseio.com/";
 
-  Future<User> userData2() async {
-    final response = await http.get(Uri.parse('$_baseUrl/users.json'));
-    if (response.statusCode == 200) {
-      return User.fromJson(jsonDecode(response.body));
-    } else {
-      throw Exception('Failed to load album');
-    }
-  }
-
   final Map<String, User> _items = {...userData};
+  Map<String, dynamic> _items2 = {};
+
+  Future<void> userDataBanco() {
+    return http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
+      Map<String, dynamic> data = jsonDecode(response.body);
+      User user = User.fromJson(data);
+      print(user);
+    });
+  }
 
   List<User> get all {
     return [..._items.values];
@@ -58,17 +58,15 @@ class Users with ChangeNotifier {
           'avatarUrl': user.avatarUrl
         }),
       );
-
       final id = jsonDecode(response.body)['name'];
-      print(jsonDecode(response.body)['email']);
 
       _items.putIfAbsent(
         id,
         () => User(
-          id,
-          user.name,
-          user.email,
-          user.avatarUrl,
+          id: id,
+          name: user.name,
+          email: user.email,
+          avatarUrl: user.avatarUrl,
         ),
       );
     }
@@ -82,6 +80,7 @@ class Users with ChangeNotifier {
         Uri.parse("$_baseUrl/users/${user.id}.json"),
       );
       notifyListeners();
+      userDataBanco();
     }
   }
 }

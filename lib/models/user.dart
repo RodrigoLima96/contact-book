@@ -4,8 +4,18 @@ class User {
   final String email;
   final String avatarUrl;
 
-  const User(this.id, this.name, this.email, this.avatarUrl);
+  const User({
+    required this.id,
+    required this.name,
+    required this.email,
+    required this.avatarUrl,
+  });
 
-  factory User.fromJson(Map<String, dynamic> json) =>
-      User(json['id'], json['name'], json['email'], json['']);
+  factory User.fromJson(Map<String, dynamic> parsedJson) {
+    return User(
+        id: parsedJson['id'],
+        name: parsedJson['name'],
+        email: parsedJson['email'],
+        avatarUrl: parsedJson['avatarUrl']);
+  }
 }
