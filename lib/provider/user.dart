@@ -9,13 +9,15 @@ class Users with ChangeNotifier {
       "https://contact-book-a39ab-default-rtdb.firebaseio.com/";
 
   final Map<String, User> _items = {...userData};
-  Map<String, dynamic> _items2 = {};
+  Map<String, User> _items2 = {};
 
-  Future<void> userDataBanco() {
-    return http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
-      Map<String, dynamic> data = jsonDecode(response.body);
-      User user = User.fromJson(data);
-      print(user);
+  Future<void> userDataBanco() async {
+    return await http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
+      final Map<String, dynamic> jsonString = jsonDecode(response.body);
+      jsonString.forEach((key, value) {
+        User.fromJson(value);
+        print(jsonString.runtimeType);
+      });
     });
   }
 
@@ -53,11 +55,13 @@ class Users with ChangeNotifier {
       final response = await http.post(
         Uri.parse("$_baseUrl/users.json"),
         body: jsonEncode({
+          'id': '1',
           'name': user.name,
           'email': user.email,
           'avatarUrl': user.avatarUrl
         }),
       );
+
       final id = jsonDecode(response.body)['name'];
 
       _items.putIfAbsent(
