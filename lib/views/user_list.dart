@@ -10,7 +10,6 @@ class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Users users = Provider.of(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Padding(

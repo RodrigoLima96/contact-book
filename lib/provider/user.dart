@@ -1,23 +1,31 @@
 import 'dart:convert';
 import 'package:contatos/models/user.dart';
-import 'package:contatos/user_data/user_data.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class Users with ChangeNotifier {
   static const _baseUrl =
       "https://contact-book-a39ab-default-rtdb.firebaseio.com/";
 
-  final Map<String, User> _items = {...userData};
-  Map<String, User> _items2 = {};
+  final Map<String, User> _items = {};
 
-  Future<void> userDataBanco() async {
+  Future<void> getDataBase() async {
     return await http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
-      final Map<String, dynamic> jsonString = jsonDecode(response.body);
-      jsonString.forEach((key, value) {
-        User.fromJson(value);
-        print(jsonString.runtimeType);
-      });
+      if (response.body.toString() != 'null') {
+        final Map<String, dynamic> jsonString = jsonDecode(response.body);
+        jsonString.forEach((key, value) {
+          User user = User.fromJson(value, key);
+          var userData = {
+            key: User(
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              avatarUrl: user.avatarUrl,
+            ),
+          };
+          _items.addAll(userData);
+        });
+      }
     });
   }
 
@@ -26,10 +34,12 @@ class Users with ChangeNotifier {
   }
 
   int get count {
+    getDataBase();
     return _items.length;
   }
 
   User byIndex(int i) {
+    getDataBase();
     return _items.values.elementAt(i);
   }
 
@@ -55,7 +65,6 @@ class Users with ChangeNotifier {
       final response = await http.post(
         Uri.parse("$_baseUrl/users.json"),
         body: jsonEncode({
-          'id': '1',
           'name': user.name,
           'email': user.email,
           'avatarUrl': user.avatarUrl
@@ -79,12 +88,11 @@ class Users with ChangeNotifier {
 
   Future<void> remove(User user) async {
     if (user != null && user.id != null) {
-      _items.remove(user.id);
       await http.delete(
         Uri.parse("$_baseUrl/users/${user.id}.json"),
       );
+      _items.remove(user.id);
       notifyListeners();
-      userDataBanco();
     }
   }
 }

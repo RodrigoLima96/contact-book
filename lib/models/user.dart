@@ -11,9 +11,9 @@ class User {
     required this.avatarUrl,
   });
 
-  factory User.fromJson(Map<String, dynamic> parsedJson) {
+  factory User.fromJson(Map<String, dynamic> parsedJson, id) {
     return User(
-        id: parsedJson['id'],
+        id: id,
         name: parsedJson['name'],
         email: parsedJson['email'],
         avatarUrl: parsedJson['avatarUrl']);
