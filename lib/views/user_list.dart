@@ -29,10 +29,14 @@ class UserList extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView.builder(
-        itemCount: users.count,
-        itemBuilder: (ctx, i) => UserTile(user: users.byIndex(i)),
-      ),
+      body: users.count == 0
+          ? const Center(
+              child: CircularProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: users.count,
+              itemBuilder: (ctx, i) => UserTile(user: users.byIndex(i)),
+            ),
     );
   }
 }

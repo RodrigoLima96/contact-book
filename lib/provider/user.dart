@@ -9,7 +9,6 @@ class Users with ChangeNotifier {
 
   final Map<String, User> _items = {};
   bool startApp = true;
-
   Future<void> getDataBase() async {
     return await http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
       if (response.body.toString() != 'null') {
@@ -31,12 +30,7 @@ class Users with ChangeNotifier {
         }
       }
       startApp = false;
-      print('uma vez');
     });
-  }
-
-  List<User> get all {
-    return [..._items.values];
   }
 
   int get count {
