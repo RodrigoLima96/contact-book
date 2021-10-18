@@ -8,6 +8,7 @@ class Users with ChangeNotifier {
       "https://contact-book-a39ab-default-rtdb.firebaseio.com/";
 
   final Map<String, User> _items = {};
+  bool startApp = true;
 
   Future<void> getDataBase() async {
     return await http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
@@ -25,7 +26,12 @@ class Users with ChangeNotifier {
           };
           _items.addAll(userData);
         });
+        if (startApp) {
+          notifyListeners();
+        }
       }
+      startApp = false;
+      print('uma vez');
     });
   }
 
