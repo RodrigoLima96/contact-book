@@ -4,12 +4,18 @@ import 'package:contatos/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class UserList extends StatelessWidget {
+class UserList extends StatefulWidget {
   const UserList({Key? key}) : super(key: key);
 
   @override
+  State<UserList> createState() => _UserListState();
+}
+
+class _UserListState extends State<UserList> {
+  @override
   Widget build(BuildContext context) {
     final Users users = Provider.of(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Padding(
@@ -29,14 +35,10 @@ class UserList extends StatelessWidget {
           ),
         ],
       ),
-      body: users.count == 0
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              itemCount: users.count,
-              itemBuilder: (ctx, i) => UserTile(user: users.byIndex(i)),
-            ),
+      body: ListView.builder(
+        itemCount: users.count,
+        itemBuilder: (ctx, i) => UserTile(user: users.byIndex(i)),
+      ),
     );
   }
 }

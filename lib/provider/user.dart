@@ -9,6 +9,7 @@ class Users with ChangeNotifier {
 
   final Map<String, User> _items = {};
   bool startApp = true;
+
   Future<void> getDataBase() async {
     return await http.get(Uri.parse("$_baseUrl/users/.json")).then((response) {
       if (response.body.toString() != 'null') {
